@@ -11,12 +11,12 @@ Game modes:
 - [1/10] None, plain vanilla tech cost
 - [2/10] Funnel (slow start, fast endgame)
 - [11/10] Miserable Spoon (Funnel^2 * 10)
-- [6/10] Fibonacci (cumulative)
+- [7/10] Fibonacci (cumulative)
 - [3/10] Spiral (X * N, N=depth, Ct=1)
 - [7/10] Mad Spiral (Fibonacci * N, N=depth)
 - [4-7/10] Tree (X * N * Ct, N=depth, Ct=2, 3, 4, ...)
 - [9/10] Mad Tree (Fibonacci * N * Ct, N=depth, Ct=2, 3, 4, ...)
-- [10/10] A Long Way Home (X * N^2, N=depth)
+- [6/10] A Long Way Home (X * N^2, N=depth)
 
 ![](https://assets-mod.factorio.com/assets/d27abd22592c98c91f68f8cbf5909d6a9d9bae11.png)
 
@@ -62,5 +62,9 @@ Fig.(5) - Table of values used in the demo (in-game values and modded maps are e
 ---
 
 ## Known Bugs and Mod compatibility
+
+*Technology Overload* should be compatible to all mods and can be added to ongoing saves. However, compatibility has been improved for special circumstances with the following mods:
+
+- pY modpack (value are capped at 10^12 due to overflow issues)
 
 It's a new mod, if you encounter any issue or have particular requests for other game modes, please refer to the Discussion page of this mod, thanks!
