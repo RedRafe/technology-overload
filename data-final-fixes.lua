@@ -2,6 +2,9 @@
 local T      = techover.technology
 local CONFIG = require("__technology-overload__/" .. "config")
 
+-- 0. Populate tech tree depths
+if not technology_overload_depths then technology_overload_depths = {} end
+T.populateDepths()
 
 -- A. get settings from startup
 local difficulty      = settings.startup["to-difficulty"].value

@@ -61,4 +61,15 @@ function Utils.sum(tbl)
   return s
 end
 
+function Utils.max(t)
+  if #t == 0 then return 0 end
+  local key, value = 1, t[1]
+  for i = 2, #t do
+      if value < t[i] then
+          key, value = i, t[i]
+      end
+  end
+  return value
+end
+
 return Utils

@@ -106,9 +106,14 @@ local function hasPrerequisites(technology)
 end
 
 -- @ technology: Prototype/Technology
--- @ seen: Table<String>
 local function getTechnologyDepth(technology)
+  -- check technology integrity
   if not technology then return 0 end
+  -- check if technology's depth is already known (for opptimization)
+  if technology_overload_depths[technology.name] ~= nil then
+    return technology_overload_depths[technology.name]
+  end
+  -- compute technology's depth recursively otherwise
   local currentDepth = 1
   if hasPrerequisites(technology) and (#technology.prerequisites > 0) then
     local depths = {}
@@ -116,20 +121,26 @@ local function getTechnologyDepth(technology)
       table.insert(depths, getTechnologyDepth(data.raw.technology[prerequisite]))
     end
     table.sort(depths)
-    return currentDepth + depths[#depths]
+    currentDepth = currentDepth + depths[#depths]
   end
+  -- update table of depths & return value
+  technology_overload_depths[technology.name] = currentDepth
   return currentDepth
 end
 
-local function findMaxDepth()
-  local maxDepth = 0
-  for _, tech in pairs(data.raw.technology) do
-    if tech ~= nil then
-      local depth = getTechnologyDepth(tech)
-      if depth > maxDepth then maxDepth = depth end
+local function populateDepths()
+  for key, technology in pairs(data.raw.technology) do 
+    if technology and technology_overload_depths[technology.name] == nil then
+      technology_overload_depths[technology.name] = getTechnologyDepth(technology)
     end
   end
-  return maxDepth
+
+  log("=== technology_overload_depths ===")
+  log(serpent.block(technology_overload_depths))
+end
+
+local function findMaxDepth()
+  return math.max(0, utils.max(technology_overload_depths))
 end
 
 -- @ base: number
@@ -196,7 +207,6 @@ local function exponentialCumulativeCost(technology, p)
     end
     prerequisiteCost = utils.sum(depths)
   end
-  log(p.treeCoefficient .. "     " .. BaseDepth(currentDepth, p))
   return floor(currentCost * p.treeCoefficient * BaseDepth(currentDepth, p) + prerequisiteCost)
 end
 
@@ -330,6 +340,7 @@ techover.technology.getDepth          = getTechnologyDepth
 techover.technology.getMaxDepth       = findMaxDepth
 techover.technology.getExpCumCost     = exponentialCumulativeCost
 techover.technology.getFibonacciCost  = Fibonacci
+techover.technology.populateDepths    = populateDepths
 techover.technology.None           = nil
 techover.technology.Funnel         = difficultyFunnel
 techover.technology.MiserableSpoon = difficultyMiserableSpoon
