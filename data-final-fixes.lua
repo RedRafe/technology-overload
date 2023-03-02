@@ -2,9 +2,12 @@
 local T      = techover.technology
 local CONFIG = require("__technology-overload__/" .. "config")
 
--- 0. Populate tech tree depths
+-- Cache depth, Fibonacci's and cumulative costs
+-- to optimize recursion
 if not technology_overload_depths then technology_overload_depths = {} end
-T.populateDepths()
+if not technology_overload_fibonacci then technology_overload_fibonacci = {} end
+if not technology_overload_cumulative then technology_overload_cumulative = {} end
+T.cacheDepths()
 
 -- A. get settings from startup
 local difficulty      = settings.startup["to-difficulty"].value

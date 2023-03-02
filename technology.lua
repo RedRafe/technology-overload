@@ -7,6 +7,7 @@ local str   = tostring
 local MAX_UINT32 = 0xFFFFFFFF
 local MAX_INT64  = 0x7FFFFFFFFFFFFFFF
 local MAX_DOUBLE = 0x1.FFFFFFFFFFFFFP+1023
+local MAX_COST   = 0xE8D4A51000 -- 10^12
 
 ---------------------------------------------------------------------------
 -- -- -- Helper Functions
@@ -128,15 +129,18 @@ local function getTechnologyDepth(technology)
   return currentDepth
 end
 
-local function populateDepths()
+local function cacheDepths()
   for key, technology in pairs(data.raw.technology) do 
     if technology and technology_overload_depths[technology.name] == nil then
       technology_overload_depths[technology.name] = getTechnologyDepth(technology)
     end
   end
+end
 
-  log("=== technology_overload_depths ===")
-  log(serpent.block(technology_overload_depths))
+local function cacheFibnacci()
+end
+
+local function cacheCumulative()
 end
 
 local function findMaxDepth()
@@ -164,7 +168,19 @@ end
 ---------------------------------------------------------------------------
 
 -- @ technology: Prototype/Technology
+-- @ p as preset of attributes:
+  -- searchDepth: int,        refers to max depth to search. -1 means all depths
+  -- treeCoefficient: double, multiplies cost by this value
+  -- applyDepth: bool 0/1,    wheter to multiply depth coefficient
+  -- depthExp: double,        power of the exponent base
+  -- maxDepth: int,           max depth across the tech tree
+  -- inverseDepth: bool 0/1,  wheter to apply reverse depth computation
 local function Fibonacci(technology, p)
+  -- cached value
+  if technology_overload_fibonacci[technology.name] ~= nil then
+    return technology_overload_fibonacci[technology.name]
+  end
+  -- compute value
   local currentCost = getTechnologyUnitCount(technology) or 0
   local currentDepth = getTechnologyDepth(technology)
   local prerequisiteCost = 0
@@ -185,7 +201,10 @@ local function Fibonacci(technology, p)
     end
     prerequisiteCost = sumFibonacci
   end
-  return floor(currentCost * p.treeCoefficient * BaseDepth(currentDepth, p) + prerequisiteCost)
+  local costFibonacci = currentCost * p.treeCoefficient * BaseDepth(currentDepth, p) + prerequisiteCost
+  costFibonacci = math.min(MAX_COST, floor(costFibonacci))
+  technology_overload_fibonacci[technology.name] = costFibonacci
+  return costFibonacci
 end
 
 -- @ technology: Prototype/Technology
@@ -197,6 +216,11 @@ end
   -- maxDepth: int,           max depth across the tech tree
   -- inverseDepth: bool 0/1,  wheter to apply reverse depth computation
 local function exponentialCumulativeCost(technology, p)
+  -- cached value
+  if technology_overload_cumulative[technology.name] ~= nil then
+    return technology_overload_cumulative[technology.name]
+  end
+  -- compute value
   local currentCost = getTechnologyUnitCount(technology) or 0
   local currentDepth = getTechnologyDepth(technology)
   local prerequisiteCost = 0
@@ -207,7 +231,10 @@ local function exponentialCumulativeCost(technology, p)
     end
     prerequisiteCost = utils.sum(depths)
   end
-  return floor(currentCost * p.treeCoefficient * BaseDepth(currentDepth, p) + prerequisiteCost)
+  local costCumulative = currentCost * p.treeCoefficient * BaseDepth(currentDepth, p) + prerequisiteCost
+  costCumulative = math.min(MAX_COST, floor(costCumulative))
+  technology_overload_cumulative[technology.name] = costCumulative
+  return costCumulative
 end
 
 ---------------------------------------------------------------------------
@@ -340,7 +367,7 @@ techover.technology.getDepth          = getTechnologyDepth
 techover.technology.getMaxDepth       = findMaxDepth
 techover.technology.getExpCumCost     = exponentialCumulativeCost
 techover.technology.getFibonacciCost  = Fibonacci
-techover.technology.populateDepths    = populateDepths
+techover.technology.cacheDepths      = cacheDepths
 techover.technology.None           = nil
 techover.technology.Funnel         = difficultyFunnel
 techover.technology.MiserableSpoon = difficultyMiserableSpoon
