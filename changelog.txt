@@ -1,7 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+Date: 02.03.2023
+  Bugfixes:
+    - Fixed misspelling "dept" > "depth"
+    - Added additional integrity checks for technologies that dont exist
+---------------------------------------------------------------------------------------------------
 Version: 0.1.4
 Date: 09.02.2023
-  Fixes:
+  Bugfixes:
     - Fixed release of v0.1.3 that had errors with VCS
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.3
@@ -9,7 +15,7 @@ Date: 09.02.2023
   Changes:
     - Allowed custom parameters to be double instead of int for better fine tuning
     - Allowed decreasing exponents for depths
-  Fixes:
+  Bugfixes:
     - Fixed exp function executing always the square value
     - Fixed cutom parameters not being applied correctly
 ---------------------------------------------------------------------------------------------------
