@@ -1,3 +1,10 @@
+# Personal
+.vscode/
+scripts/
+forum.lua
+changelog_template.txt
+TODO_list.txt
+
 # Compiled Lua sources
 luac.out
 
