@@ -20,9 +20,9 @@ data:extend({
 	},
 	{
 		type = "bool-setting",
-		name = "to-searchDept",
+		name = "to-searchDepth",
 		setting_type = "startup",
-		default_value = DEFAULT.searchDept,
+		default_value = DEFAULT.searchDepth,
 		order = "to-300"
 	},
 	{

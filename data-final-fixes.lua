@@ -26,7 +26,7 @@ end
 
 local function updatePresetParams()
   return {
-    searchDept      = settings.startup["to-searchDept"].value,
+    searchDepth     = settings.startup["to-searchDepth"].value,
     treeCoefficient = settings.startup["to-treeCoefficient"].value,
     applyDepth      = settings.startup["to-applyDepth"].value,
     depthExp        = settings.startup["to-depthExp"].value,

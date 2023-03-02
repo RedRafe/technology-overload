@@ -4,9 +4,9 @@ local utils = require("__technology-overload__/" .. "utils")
 local floor = math.floor
 local str   = tostring
 
-local MAX_UINT32     = 0xFFFFFFFF
-local MAX_INT64      = 0x7FFFFFFFFFFFFFFF
-local MAX_DOUBLE     = 0x1.FFFFFFFFFFFFFP+1023
+local MAX_UINT32 = 0xFFFFFFFF
+local MAX_INT64  = 0x7FFFFFFFFFFFFFFF
+local MAX_DOUBLE = 0x1.FFFFFFFFFFFFFP+1023
 
 ---------------------------------------------------------------------------
 -- -- -- Helper Functions
@@ -117,7 +117,6 @@ local function getTechnologyDepth(technology)
 end
 
 local function findMaxDepth()
-  if
   local maxDepth = 0
   for _, tech in pairs(data.raw.technology) do
     local depth = getTechnologyDepth(tech)
@@ -129,14 +128,6 @@ end
 -- @ base: number
 -- @ power: number
 local function Exp(base, power)
-  --[[
-  local result = base
-  power = floor(power - 1)
-  while power > 0 do
-    result = result * base
-    power = power - 1
-  end
-  ]]
   return base ^ power
 end
 
