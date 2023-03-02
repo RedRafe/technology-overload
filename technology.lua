@@ -97,13 +97,18 @@ end
 
 -- @ technology: Prototype/Technology
 local function hasPrerequisites(technology)
-  if technology.prerequisites ~= nil then return true end
+  if not technology then return false end
+  if technology.prerequisites ~= nil then
+    if #technology.prerequisites == 0 then return false end
+    return true
+  end
   return false
 end
 
 -- @ technology: Prototype/Technology
 -- @ seen: Table<String>
 local function getTechnologyDepth(technology)
+  if not technology then return 0 end
   local currentDepth = 1
   if hasPrerequisites(technology) and (#technology.prerequisites > 0) then
     local depths = {}
@@ -119,8 +124,10 @@ end
 local function findMaxDepth()
   local maxDepth = 0
   for _, tech in pairs(data.raw.technology) do
-    local depth = getTechnologyDepth(tech)
-    if depth > maxDepth then maxDepth = depth end
+    if tech ~= nil then
+      local depth = getTechnologyDepth(tech)
+      if depth > maxDepth then maxDepth = depth end
+    end
   end
   return maxDepth
 end
