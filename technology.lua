@@ -1,8 +1,9 @@
 if not techover.technology then techover.technology = {} end
 
-local utils = require("__technology-overload__/" .. "utils")
+local utils = require("__technology-overload__/utils")
 local floor = math.floor
 local str   = tostring
+local abs   = math.abs
 
 local MAX_UINT32 = 0xFFFFFFFF
 local MAX_INT64  = 0x7FFFFFFFFFFFFFFF
