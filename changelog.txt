@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.7
+Date: 30.05.2023
+  Features:
+    - Added Space Exploration compatibility
+  Bugfixes:
+    - Fixed computation for maxdepth causing crashes on load
+---------------------------------------------------------------------------------------------------
 Version: 0.1.6
 Date: 02.03.2023
   Changes:
