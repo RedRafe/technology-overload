@@ -1,6 +1,4 @@
-if not techover.technology then techover.technology = {} end
-
-local utils = require("__technology-overload__/utils")
+local utils = require 'lib/utils'
 local floor = math.floor
 local str   = tostring
 local abs   = math.abs
@@ -10,21 +8,9 @@ local MAX_INT64  = 0x7FFFFFFFFFFFFFFF
 local MAX_DOUBLE = 0x1.FFFFFFFFFFFFFP+1023
 local MAX_COST   = 0xE8D4A51000 -- 10^12
 
----------------------------------------------------------------------------
--- -- -- Helper Functions
----------------------------------------------------------------------------
-
--- @ tableIn: Table
--- @ element: any
-local function tableContains(tableIn, element)
-  if not tableIn then return false end
-  for ___, value in pairs(tableIn) do
-    if value == element then
-      return true
-    end
-  end
-  return false
-end
+-- ============================================================================
+-- -- -- HELPER FUNCTIONS
+-- ============================================================================
 
 -- Whether a Prototype/Technology has a count_formula or not
 -- @ technology: Prototype/Technology
@@ -138,14 +124,33 @@ local function cacheDepths()
   end
 end
 
-local function cacheFibnacci()
+local function computeCost(db, p, equation)
+  for _, technology in pairs(data.raw.technology) do
+    local tech = {}
+  
+    tech.name    = technology.name
+    tech.count   = getTechnologyUnitCount(technology)
+    tech.formula = getTechnologyUnitFormula(technology)
+    tech.depth   = getTechnologyDepth(technology)
+    tech.ecc     = equation(technology, p)
+  
+    table.insert(db, tech)
+  end
 end
 
-local function cacheCumulative()
+local function updatePresetParams()
+  return {
+    searchDepth     = settings.startup['to-searchDepth'].value,
+    treeCoefficient = settings.startup['to-treeCoefficient'].value,
+    applyDepth      = settings.startup['to-applyDepth'].value,
+    depthExp        = settings.startup['to-depthExp'].value,
+    inverseDepth    = settings.startup['to-inverseDepth'].value,
+    maxDepth        = preset.maxDepth
+  }
 end
 
 local function findMaxDepth()
-  return math.max(0, utils.max(technology_overload_depths))
+  return math.max(0, utils.get_max(technology_overload_depths))
 end
 
 -- @ base: number
@@ -164,12 +169,12 @@ local function BaseDepth(currentDepth, p)
   return Exp(currentDepth, p.depthExp)
 end
 
----------------------------------------------------------------------------
--- -- -- Cost Computation
----------------------------------------------------------------------------
+-- ============================================================================
+-- -- -- COST COMPUTATION
+-- ============================================================================
 
--- @ technology: Prototype/Technology
--- @ p as preset of attributes:
+---@param technology Prototype/Technology
+---@param p preset of attributes:
   -- searchDepth: int,        refers to max depth to search. -1 means all depths
   -- treeCoefficient: double, multiplies cost by this value
   -- applyDepth: bool 0/1,    wheter to multiply depth coefficient
@@ -208,8 +213,8 @@ local function Fibonacci(technology, p)
   return costFibonacci
 end
 
--- @ technology: Prototype/Technology
--- @ p as preset of attributes:
+---@param technology Prototype/Technology
+---@param p preset of attributes:
   -- searchDepth: int,        refers to max depth to search. -1 means all depths
   -- treeCoefficient: double, multiplies cost by this value
   -- applyDepth: bool 0/1,    wheter to multiply depth coefficient
@@ -238,9 +243,9 @@ local function exponentialCumulativeCost(technology, p)
   return costCumulative
 end
 
----------------------------------------------------------------------------
--- -- -- Difficulty Levels 
----------------------------------------------------------------------------
+-- ============================================================================
+-- -- -- DIFFICULTY LEVELS 
+-- ============================================================================
 
 -- Fibonacci
 local function difficultyFibonacci(techs, p)
@@ -360,22 +365,32 @@ local function difficultyCustom(techs, p)
   end
 end
 
----------------------------------------------------------------------------
+-- ============================================================================
 
-techover.technology.getCount          = getTechnologyUnitCount
-techover.technology.getFormula        = getTechnologyUnitFormula
-techover.technology.getDepth          = getTechnologyDepth
-techover.technology.getMaxDepth       = findMaxDepth
-techover.technology.getExpCumCost     = exponentialCumulativeCost
-techover.technology.getFibonacciCost  = Fibonacci
-techover.technology.cacheDepths      = cacheDepths
-techover.technology.None           = nil
-techover.technology.Funnel         = difficultyFunnel
-techover.technology.MiserableSpoon = difficultyMiserableSpoon
-techover.technology.Tree           = difficultyTree
-techover.technology.MadTree        = difficultyMadTree
-techover.technology.Spiral         = difficultySpiral
-techover.technology.MadSpiral      = difficultyMadSpiral
-techover.technology.Fibonacci      = difficultyFibonacci
-techover.technology.ALongWayHome   = difficultyALongWayHome
-techover.technology.Custom         = difficultyCustom
+local techover = techover or {}
+techover.technology = techover.technology or {}
+
+-- -- METHODS
+techover.technology.getCount           = getTechnologyUnitCount
+techover.technology.getFormula         = getTechnologyUnitFormula
+techover.technology.getDepth           = getTechnologyDepth
+techover.technology.getMaxDepth        = findMaxDepth
+techover.technology.getExpCumCost      = exponentialCumulativeCost
+techover.technology.getFibonacciCost   = Fibonacci
+techover.technology.cacheDepths        = cacheDepths
+techover.technology.computeCost        = computeCost
+techover.technology.updatePresetParams = updatePresetParams
+
+-- -- PRESETS
+techover.technology.None               = nil
+techover.technology.Funnel             = difficultyFunnel
+techover.technology.MiserableSpoon     = difficultyMiserableSpoon
+techover.technology.Tree               = difficultyTree
+techover.technology.MadTree            = difficultyMadTree
+techover.technology.Spiral             = difficultySpiral
+techover.technology.MadSpiral          = difficultyMadSpiral
+techover.technology.Fibonacci          = difficultyFibonacci
+techover.technology.ALongWayHome       = difficultyALongWayHome
+techover.technology.Custom             = difficultyCustom
+
+return techover
