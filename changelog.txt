@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2024-12-23
+  Changes:
+    - Update to Factorio 2.0
+    - Technologies with `ignore_multiplier_cost` are now ignored a well (automation)
+---------------------------------------------------------------------------------------------------
 Version: 0.1.7
 Date: 30.05.2023
   Features:

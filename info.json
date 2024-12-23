@@ -1,13 +1,13 @@
 {
   "name": "technology-overload",
-  "version": "0.1.7",
+  "version": "2.0.0",
   "title": "Technology Overload",
   "author": "RedRafe",
   "dependencies": [
-    "base >= 1.1.0",
+    "base >= 2.0",
     "(?) pypostprocessing",
     "(?) space-exploration-postprocess"
   ],
   "description": "Vanilla Factorio is too easy for you? Try the Fibonacci research cost! Take on the new challenges of Technology Overload, new ways to increase game difficulty! Technology cost tweaked in different ways to introduce new challenges and spice up you tech tree.",
-  "factorio_version": "1.1"
+  "factorio_version": "2.0"
 }

@@ -67,5 +67,4 @@ elseif difficulty == 'Custom Exponential' then
 elseif difficulty == 'Custom Fibonacci' then
   T.computeCost(tech_db, preset, T.getFibonacciCost)
   T.Fibonacci(tech_db, preset)
-
 end

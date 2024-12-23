@@ -63,13 +63,27 @@ end
 -- @ technologyName: String
 -- @ value: int
 local function setTechnologyUnitCount(technologyName, value)
-  data.raw.technology[technologyName].unit.count = value
+  local tech = data.raw.technology[technologyName]
+  if not tech then
+    return
+  end
+  if tech.ignore_tech_cost_multiplier == true then
+    return
+  end
+  tech.unit.count = value
 end
 
 -- @ technologyName: String
 -- @ formula: string
 local function setTechnologyUnitFormula(technologyName, formula)
-  data.raw.technology[technologyName].unit.count_formula = formula
+  local tech = data.raw.technology[technologyName]
+  if not tech then
+    return
+  end
+  if tech.ignore_tech_cost_multiplier == true then
+    return
+  end
+  tech.unit.count_formula = formula
 end
 
 -- @ tech: Tech object
