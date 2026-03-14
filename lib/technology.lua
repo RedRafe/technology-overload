@@ -152,6 +152,10 @@ local function computeCost(db, p, equation)
   end
 end
 
+local function findMaxDepth()
+  return math.max(0, utils.get_max(technology_overload_depths))
+end
+
 local function updatePresetParams()
   return {
     searchDepth     = settings.startup['to-searchDepth'].value,
@@ -159,12 +163,8 @@ local function updatePresetParams()
     applyDepth      = settings.startup['to-applyDepth'].value,
     depthExp        = settings.startup['to-depthExp'].value,
     inverseDepth    = settings.startup['to-inverseDepth'].value,
-    maxDepth        = preset.maxDepth
+    maxDepth        = findMaxDepth()
   }
-end
-
-local function findMaxDepth()
-  return math.max(0, utils.get_max(technology_overload_depths))
 end
 
 -- @ base: number
