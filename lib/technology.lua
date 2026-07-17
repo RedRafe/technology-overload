@@ -296,6 +296,15 @@ local function exponentialCumulativeCost(technology, p, visiting)
     return costCumulative
 end
 
+-- Flags every infinite-level technology to be skipped by the cost multiplier
+local function ignoreInfiniteTechnologies()
+    for _, technology in pairs(data.raw.technology) do
+        if technology.max_level == 'infinite' then
+            technology.ignore_tech_cost_multiplier = true
+        end
+    end
+end
+
 -- ============================================================================
 -- -- -- DIFFICULTY LEVELS
 -- ============================================================================
@@ -431,6 +440,7 @@ techover.technology.getMaxDepth        = findMaxDepth
 techover.technology.getExpCumCost      = exponentialCumulativeCost
 techover.technology.getFibonacciCost   = Fibonacci
 techover.technology.cacheDepths        = cacheDepths
+techover.technology.ignoreInfiniteTechnologies = ignoreInfiniteTechnologies
 techover.technology.computeCost        = computeCost
 techover.technology.updatePresetParams = updatePresetParams
 

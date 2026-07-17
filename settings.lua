@@ -17,6 +17,13 @@ data:extend({
 	},
 	{
 		type = 'bool-setting',
+		name = 'to-ignoreInfiniteTechs',
+		setting_type = 'startup',
+		default_value = false,
+		order = 'to-150'
+	},
+	{
+		type = 'bool-setting',
 		name = 'to-allowCustomization',
 		setting_type = 'startup',
 		default_value = DEFAULT.allowCustomization,

@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.2
+Date: 2026-07-17
+  Features:
+    - Added startup setting "Ignore infinite technologies" to exempt infinite max-level technologies (e.g. productivity researches) from the cost multiplier
+---------------------------------------------------------------------------------------------------
 Version: 2.1.1
 Date: 2026-07-17
   Changes:

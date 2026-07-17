@@ -24,6 +24,11 @@ local preset = CONFIG.presets[difficulty]
 preset.maxDepth = T.getMaxDepth()
 local tech_db = {}
 
+-- A.5 optionally exempt infinite-level technologies from the cost multiplier
+if settings.startup['to-ignoreInfiniteTechs'].value then
+    T.ignoreInfiniteTechnologies()
+end
+
 -- B. iterate data.raw and save technology info
 if settings.startup['to-allowCustomization'].value then
     preset = T.updatePresetParams()
