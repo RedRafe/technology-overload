@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 2026-07-17
+  Changes:
+    - Added optional dependency on planet-muluna for load-order compatibility
+  Bugfixes:
+    - Fixed potential infinite hang during prototype loading when technology prerequisites form a cycle across mods (depth/cost computation now detects cycles and falls back to an approximated value instead of recursing forever)
+---------------------------------------------------------------------------------------------------
 Version: 2.1.0
 Date: 2026-07-01
   Changes:
